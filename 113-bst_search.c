@@ -4,7 +4,8 @@
  * bst_search - searches for a value in a Binary Search Tree (BST)
  * @tree: root of the BST to search
  * @value: value to search for
- * Return: pointer to the node containing the value, or NULL if not found or if tree is NULL
+ * Return: pointer to the node containing the value,
+ * or NULL if not found or if tree is NULL
  */
 bst_t *bst_search(const bst_t *tree, int value)
 {
