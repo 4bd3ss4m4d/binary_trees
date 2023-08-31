@@ -68,4 +68,9 @@ bst_t *bst_remove(bst_t *root, int value);
 
 int binary_tree_is_avl(const binary_tree_t *tree);
 
+
+
+
+int binary_tree_is_heap(const binary_tree_t *tree);
+
 #endif /* BINARY_TREES_H */
