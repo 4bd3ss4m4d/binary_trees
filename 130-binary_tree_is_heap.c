@@ -1,229 +1,95 @@
 #include "binary_trees.h"
 
-int btih_helper(const binary_tree_t *tree);
-int binary_tree_is_complete(const binary_tree_t *tree);
-int btic_helper(const binary_tree_t *tree, size_t index, size_t size);
-size_t binary_tree_size(const binary_tree_t *tree);
+int check_complete(const binary_tree_t *root, int index, int nodes);
+int check_status(const binary_tree_t *node);
+int get_nodes(const binary_tree_t *root);
 
 /**
- * binary_tree_is_heap - checks if a binary tree is a max heap
- * @tree: pointer to the root node of the binary tree
+ * binary_tree_is_heap - Checks if a binary tree is a max heap.
+ * @tree: Pointer to the root node of the binary tree.
  *
- * Return: 1 if the tree is a max heap, 0 otherwise or if the tree is NULL
+ * Return: 1 if the binary tree is a max heap, 0 otherwise or if the
+ *         tree is NULL.
  */
 int binary_tree_is_heap(const binary_tree_t *tree)
 {
+	int finish, state, i = 0, tree_nodes;
+
 	if (!tree)
 	{
 		return (0);
 	}
 
-	return (btih_helper(tree));
+	tree_nodes = get_nodes(tree);
+	finish = check_complete(tree, i, tree_nodes);
+	state = check_status(tree);
+
+	return (finish && state);
 }
 
+
 /**
- * btic_helper - helper function to check if a binary tree is complete
- * @tree: pointer to the node being checked during recursion
- * @index: current index of the node being checked
- * @size: total size of the binary tree
+ * check_complete - Checks if a binary tree is complete.
+ * @root: Pointer to the root node of the binary tree.
+ * @index: Current index of the node being checked.
+ * @nodes: Total number of nodes in the binary tree.
  *
- * Return: 1 if the subtree is complete, 0 otherwise
+ * Return: 1 if the binary tree is complete, 0 otherwise.
  */
-int btic_helper(const binary_tree_t *tree, size_t index, size_t size)
+int check_complete(const binary_tree_t *root, int index, int nodes)
 {
-	if (!tree)
+	if (!root)
 	{
 		return (1);
 	}
-
-	if (index >= size)
+	if (index >= nodes)
 	{
 		return (0);
 	}
 
-	return (btic_helper(tree->left, 2 * index + 1, size) &&
-		btic_helper(tree->right, 2 * index + 2, size));
+	return (check_complete(root->left, 2 * index + 1, nodes) &&
+			check_complete(root->right, 2 * index + 2, nodes));
 }
 
 /**
- * binary_tree_size - calculates the size of a binary tree
- * @tree: pointer to the root node of the binary tree
+ * check_status - Checks if a binary tree satisfies max-heap property.
+ * @node: Pointer to the node being checked during recursion.
  *
- * Return: size of the binary tree
+ * Return: 1 if the binary tree satisfies max-heap property, 0 otherwise.
  */
-size_t binary_tree_size(const binary_tree_t *tree)
+int check_status(const binary_tree_t *node)
 {
-	if (!tree)
-	{
-		return (0);
-	}
-
-	return (binary_tree_size(tree->left) +
-		binary_tree_size(tree->right) + 1);
-}
-
-/**
- * btih_helper - helper function to check if a binary tree is a max heap
- * @tree: pointer to the node being checked during recursion
- *
- * Return: 1 if the subtree is a max heap, 0 otherwise
- */
-int btih_helper(const binary_tree_t *tree)
-{
-	if (!tree)
+	if (!node)
 	{
 		return (1);
 	}
-
-	if (!binary_tree_is_complete(tree))
+	if (node->left)
 	{
-		return (0);
-	}
-
-	if (tree->left)
-		if (tree->left->n > tree->n)
+		if (node->left->n > node->n)
 		{
 			return (0);
 		}
-	if (tree->right)
-		if (tree->right->n > tree->n)
+	}
+	if (node->right)
+	{
+		if (node->right->n > node->n)
 		{
 			return (0);
 		}
-
-	return (btih_helper(tree->left) &&
-		btih_helper(tree->right));
+	}
+	return (check_status(node->left) && check_status(node->right));
 }
 
 /**
- * binary_tree_is_complete - checks if a binary tree is a complete binary tree
- * @tree: pointer to the root node of the binary tree
+ * get_nodes - Calculates the number of nodes in a binary tree.
+ * @root: Pointer to the root node of the binary tree.
  *
- * Return: 1 if the tree is complete, 0 otherwise or if the tree is NULL
+ * Return: Number of nodes in the binary tree.
  */
-int binary_tree_is_complete(const binary_tree_t *tree)
+int get_nodes(const binary_tree_t *root)
 {
-	size_t size;
-
-	if (!tree)
-	{
+	if (!root)
 		return (0);
-	}
-	size = binary_tree_size(tree);
-
-	return (btic_helper(tree, 0, size));
-#include "binary_trees.h"
-
-int btih_helper(const binary_tree_t *tree);
-int binary_tree_is_complete(const binary_tree_t *tree);
-int btic_helper(const binary_tree_t *tree, size_t index, size_t size);
-size_t binary_tree_size(const binary_tree_t *tree);
-
-/**
- * binary_tree_is_heap - checks if a binary tree is a max heap
- * @tree: pointer to the root node of the binary tree
- *
- * Return: 1 if the tree is a max heap, 0 otherwise or if the tree is NULL
- */
-int binary_tree_is_heap(const binary_tree_t *tree)
-{
-	if (!tree)
-	{
-		return (0);
-	}
-
-	return (btih_helper(tree));
+	return (get_nodes(root->left) +
+			get_nodes(root->right) + 1);
 }
-
-/**
- * btic_helper - helper function to check if a binary tree is complete
- * @tree: pointer to the node being checked during recursion
- * @index: current index of the node being checked
- * @size: total size of the binary tree
- *
- * Return: 1 if the subtree is complete, 0 otherwise
- */
-int btic_helper(const binary_tree_t *tree, size_t index, size_t size)
-{
-	if (!tree)
-	{
-		return (1);
-	}
-
-	if (index >= size)
-	{
-		return (0);
-	}
-
-	return (btic_helper(tree->left, 2 * index + 1, size) &&
-		btic_helper(tree->right, 2 * index + 2, size));
-}
-
-/**
- * binary_tree_size - calculates the size of a binary tree
- * @tree: pointer to the root node of the binary tree
- *
- * Return: size of the binary tree
- */
-size_t binary_tree_size(const binary_tree_t *tree)
-{
-	if (!tree)
-	{
-		return (0);
-	}
-
-	return (binary_tree_size(tree->left) +
-		binary_tree_size(tree->right) + 1);
-}
-
-/**
- * btih_helper - helper function to check if a binary tree is a max heap
- * @tree: pointer to the node being checked during recursion
- *
- * Return: 1 if the subtree is a max heap, 0 otherwise
- */
-int btih_helper(const binary_tree_t *tree)
-{
-	if (!tree)
-	{
-		return (1);
-	}
-
-	if (!binary_tree_is_complete(tree))
-	{
-		return (0);
-	}
-
-	if (tree->left)
-		if (tree->left->n > tree->n)
-		{
-			return (0);
-		}
-	if (tree->right)
-		if (tree->right->n > tree->n)
-		{
-		return (0);
-		}
-
-	return (btih_helper(tree->left) &&
-		btih_helper(tree->right));
-}
-
-/**
- * binary_tree_is_complete - checks if a binary tree is a complete binary tree
- * @tree: pointer to the root node of the binary tree
- *
- * Return: 1 if the tree is complete, 0 otherwise or if the tree is NULL
- */
-int binary_tree_is_complete(const binary_tree_t *tree)
-{
-	size_t size;
-
-	if (!tree)
-	{
-		return (0);
-	}
-	size = binary_tree_size(tree);
-
-	return (btic_helper(tree, 0, size));
-}}
